@@ -4,7 +4,7 @@ import MortgageTypes from "./MortgageTypes";
 import Repayments from "./Repayments";
 
 const Calculator = () => {
-  const currencies = ["£", "€", "C$"];
+  const currencies = ["£", "€", "$"];
 
   return (
     <section className="flex-1 bg-white text-slate-900 px-6 pb-10 rounded-s-xl relative z-10">

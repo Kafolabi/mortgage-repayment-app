@@ -3,25 +3,12 @@ import { useState, useEffect } from "react";
 import Inputs from "./Inputs";
 
 const Repayments = () => {
-  // const [rate, setRate] = useState(0);
-  // console.log(rate);
-
-  // useEffect(() => {
-  //   const retrieveCurrencyData = async () => {
-  //     const response = await fetch(
-  //       `https://api.currencyfreaks.com/v2.0/rates/latest?apikey=${KEY}&symbols=USD,EUR,CAD&base=GBP`
-  //     );
-  //     const data = await response.json();
-  //     console.log(data);
-  //   };
-  //   retrieveCurrencyData();
-  // }, []);
-
+  const calculateRepayments = () => {};
   return (
     <div className="text-left mt-3">
       <button
         className="rounded-3xl px-5 py-3 mt-5 bg-lime text-sm font-bold hover:opacity-70 focus:opacity-100"
-        onClick={() => alert("Hello")}
+        onClick={() => alert("Calculating Interest rates and repayments ... ")}
       >
         <img
           src={ICON_CALCULATOR}
