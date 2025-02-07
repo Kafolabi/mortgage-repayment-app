@@ -1,6 +1,6 @@
 const MortgageTypes = ({ mortgageType }) => {
   return (
-    <div className="space-y-4 mb-5">
+    <div className="space-y-4 mb-5 types">
       {/* Option 1 */}
       <label className="relative flex items-center cursor-pointer p-4 border rounded-lg transition duration-200 hover:bg-limelight">
         <input type="radio" name="option" value="1" className="hidden peer" />

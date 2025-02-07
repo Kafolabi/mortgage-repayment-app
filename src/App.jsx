@@ -1,3 +1,14 @@
+/**
+ * The main App component that renders the mortgage repayment calculator and results.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered App component.
+ *
+ * @example
+ * return (
+ *   <App />
+ * )
+ */
 import { useState } from "react";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -15,7 +26,7 @@ function App() {
           <div className="w-1/2 h-full bg-main md:rounded-bl-[6rem] md:rounded-tl-3xl absolute right-0"></div>
         </div>
         <Calculator />
-        <Results />
+        {/* <Results /> */}
       </section>
     </section>
     //    <div>
