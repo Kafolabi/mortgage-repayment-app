@@ -1,13 +1,74 @@
 import Inputs from "./Inputs";
 import MortgageTypes from "./MortgageTypes";
 import Repayments from "./Repayments";
-import ResultsCompleted from "./ResultsCompleted";
-import { useState } from "react";
-// import ErrorMessage from "./ErrorMessage";
+import ResultsDefault from "./ResultsDefault";
+import ResultsInterest from "./ResultsInterest";
+import ResultsRepayment from "./ResultsRepayment";
+import { useState, useEffect } from "react";
 
+/**
+ * Calculator component for calculating mortgage repayments.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @example
+ * return (
+ *   <Calculator />
+ * )
+ *
+ * @description
+ * This component allows users to input mortgage details such as amount, term, and interest rate,
+ * and calculates the monthly repayment and total interest. It supports different mortgage types
+ * (Repayment and Interest Only) and currencies (GBP, USD, NGN, EUR).
+ *
+ * @function
+ * @name Calculator
+ *
+ * @property {Array<string>} currencies - List of supported currency symbols.
+ * @property {string} mortgageAmount - The amount of the mortgage.
+ * @property {string} years - The term of the mortgage in years.
+ * @property {string} interestRate - The interest rate of the mortgage.
+ * @property {string} mortgageType - The type of mortgage (e.g., GBP, USD).
+ * @property {string} monthlyRepayment - The calculated monthly repayment amount.
+ * @property {string} totalInterest - The calculated total interest amount.
+ * @property {string} currencySymbol - The symbol of the selected currency.
+ * @property {string} selectedOption - The selected mortgage type option (Repayment or Interest Only).
+ * @property {JSX.Element} activeComponent - The component to render based on the selected option.
+ * @property {Object} errors - Object containing validation errors for the input fields.
+ *
+ * @method
+ * @name checkMortgageType
+ * @description Determines the currency symbol based on the mortgage type.
+ * @param {string} type - The type of mortgage.
+ * @returns {string} The corresponding currency symbol.
+ *
+ * @method
+ * @name handleSelection
+ * @description Handles the selection of the mortgage type.
+ * @param {Event} event - The event triggered by selecting a mortgage type.
+ *
+ * @method
+ * @name handleRender
+ * @description Renders the appropriate result component based on the selected option.
+ *
+ * @method
+ * @name calculateRepayment
+ * @description Calculates the mortgage repayment and total interest based on user inputs.
+ *
+ * @method
+ * @name handleSubmit
+ * @description Handles form submission and validates the input fields.
+ * @param {Event} e - The event triggered by form submission.
+ *
+ * @method
+ * @name clearValues
+ * @description Clears the input values in the form.
+ */
 const Calculator = () => {
   const currencies = ["£", "€", "$"];
 
+  // State variables to store user inputs and calculated values
   const [mortgageAmount, setMortgageAmount] = useState("");
   const [years, setYears] = useState("");
   const [interestRate, setInterestRate] = useState("");
@@ -16,9 +77,15 @@ const Calculator = () => {
   const [totalInterest, setTotalInterest] = useState("");
   const [currencySymbol, setCurrencySymbol] = useState("£");
 
-  // const [error, setError] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [activeComponent, setActiveComponent] = useState(<ResultsDefault />);
 
-  // Function to determine the currency symbol
+  // Effect to re-render the component when monthlyRepayment or totalInterest changes
+  useEffect(() => {
+    handleRender();
+  }, [monthlyRepayment, totalInterest]);
+
+  // Function to determine the currency symbol based on mortgage type
   const checkMortgageType = (type) => {
     let symbol = "£"; // Default
     if (type === "USD") symbol = "$";
@@ -27,7 +94,31 @@ const Calculator = () => {
     return symbol;
   };
 
-  // const [inputValue, setInputValue] = useState("");
+  // Handle selection of mortgage type
+  const handleSelection = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+  // Render the appropriate result component based on selected option
+  const handleRender = () => {
+    selectedOption === "Repayment" &&
+      setActiveComponent(
+        <ResultsRepayment
+          monthlyRepayment={monthlyRepayment}
+          totalInterest={totalInterest}
+          currencySymbol={currencySymbol}
+        />
+      );
+    selectedOption === "Interest Only" &&
+      setActiveComponent(
+        <ResultsInterest
+          monthlyRepayment={monthlyRepayment}
+          totalInterest={totalInterest}
+          currencySymbol={currencySymbol}
+        />
+      );
+    console.log("Interest Only");
+  };
 
   // Function to calculate mortgage repayment and total interest
   const calculateRepayment = () => {
@@ -36,10 +127,6 @@ const Calculator = () => {
     const years = Number(inputs[1]?.value);
     const rate = Number(inputs[2]?.value);
     const type = document.getElementById("currency")?.value || "GBP";
-    // const [currencies, ...types] = [
-    //   ...document.getElementsByClassName("types"),
-    // ];
-    // console.log(currencies, types);
     console.log(document.getElementById("currency"));
 
     setMortgageAmount(amount);
@@ -55,12 +142,13 @@ const Calculator = () => {
       let repayment = 0;
       let interest = 0;
 
-      if (type === "Repayment" || type === "GBP") {
+      console.log(selectedOption);
+      if (selectedOption === "Repayment") {
         repayment =
           (amount * monthlyInterestRate) /
           (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
 
-        interest = repayment * numberOfPayments - amount; // ✅ Total interest paid
+        interest = repayment * numberOfPayments; // ✅ Total interest paid
       } else {
         repayment = amount * monthlyInterestRate; // Interest-only payment
         interest = repayment * numberOfPayments; // ✅ Total interest paid
@@ -78,17 +166,10 @@ const Calculator = () => {
     interestRate: false,
   });
 
+  // Handle form submission and validate inputs
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create a new error state based on empty fields
-    // const newErrors = {
-    //   mortgageAmount: mortgageAmount.toString().trim() === "0",
-    //   years: years === 0,
-    //   interestRate: interestRate === 0,
-    // };
-
-    // setErrors(newErrors);
     let newErrors = {};
 
     if (!mortgageAmount) newErrors.mortgageAmount = "This field is required.";
@@ -102,6 +183,7 @@ const Calculator = () => {
     }
   };
 
+  // Clear input values
   const clearValues = () => {
     const inputs = document.getElementsByTagName("input");
     [...inputs].forEach((input) => {
@@ -156,15 +238,19 @@ const Calculator = () => {
         <span className="block text-sm font-medium text-gray-700 text-left pb-2">
           Mortgage Type
         </span>
-        <MortgageTypes mortgageType="Repayment" value="Repayment" />
-        <MortgageTypes mortgageType="Interest Only" value="interestOnly" />
+        <MortgageTypes
+          mortgageType="Repayment"
+          value="Repayment"
+          onChange={handleSelection}
+        />
+        <MortgageTypes
+          mortgageType="Interest Only"
+          value="interestOnly"
+          onChange={handleSelection}
+        />
         <Repayments onCalculate={calculateRepayment} />
       </form>
-      <ResultsCompleted
-        monthhlyRepayment={monthlyRepayment}
-        totalInterest={totalInterest}
-        currencySymbol={currencySymbol}
-      />
+      {activeComponent}
     </>
   );
 };

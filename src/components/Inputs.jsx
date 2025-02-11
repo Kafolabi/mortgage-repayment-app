@@ -1,7 +1,17 @@
 import { useState, useEffect } from "react";
 import { KEY } from "../constants";
-import ErrorMessage from "./ErrorMessage";
 
+/**
+ * Inputs component for handling mortgage amount and currency conversion.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.labels - The label for the input field.
+ * @param {string} props.errors - Error message to display.
+ * @param {string} props.placeholders - Placeholder text for the input field.
+ * @param {boolean} [props.state=true] - State to determine the input field style.
+ *
+ * @returns {JSX.Element} The rendered Inputs component.
+ */
 const Inputs = ({ labels, errors, placeholders, state = true }) => {
   const [mortgageAmount, setMortgageAmount] = useState(""); // Default amount in base currency
   const [currency, setCurrency] = useState("GBP"); // Selected currency (acts as base currency)
