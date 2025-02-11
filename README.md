@@ -1,6 +1,6 @@
 # Mortgage Repayment App
 
-This is a React and Vite project for calculating mortgage repayments. The app allows users to input mortgage information and see the monthly repayment and total repayment amounts. Kindly note that I'm not done yet.
+This is a React and Vite project for calculating mortgage repayments. The app allows users to input mortgage information and see the monthly repayment and total repayment amounts.
 
 ## Features
 
@@ -10,6 +10,7 @@ This is a React and Vite project for calculating mortgage repayments. The app al
 - **Keyboard Navigation**: Users can complete the form using only their keyboard.
 - **Responsive Design**: The app provides an optimal layout for the interface depending on the device's screen size.
 - **Interactive Elements**: Hover and focus states are available for all interactive elements on the page.
+- **Amortization Schedule**: Users can view a detailed amortization schedule showing the breakdown of each payment.
 
 ## Getting Started
 
